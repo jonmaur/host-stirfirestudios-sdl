@@ -18,12 +18,15 @@
  * @return	.
  */
 int SledgeInputWrapper::_setDeadzones( lua_State* L ) {
-	MOAI_LUA_SETUP ( SledgeInputWrapper, "UNNNN" )
+	// This looks like old stuff that just doesn't work this way anymore.
+	// call this from lua like this: SledgeInputWrapper.setDeadzones(left, right, triggers, joystick)
+	//MOAI_LUA_SETUP ( SledgeInputWrapper, "UNNNN" )
+	MOAILuaState state(L);
 
-	float left = state.GetValue < float >( 2, 0.0f );
-	float right = state.GetValue < float >( 3, 0.0f );
-	float triggers = state.GetValue < float >( 4, 0.0f );
-	float joystick = state.GetValue < float >( 5, 0.0f );
+	float left = state.GetValue < float >( 1, 0.0f );
+	float right = state.GetValue < float >( 2, 0.0f );
+	float triggers = state.GetValue < float >( 3, 0.0f );
+	float joystick = state.GetValue < float >( 4, 0.0f );
 
 	printf(
 		"Setting new deadzones...\t%0.2f\t%0.2f\t%0.2f\t%0.2f\n",
@@ -52,10 +55,13 @@ int SledgeInputWrapper::_setDeadzones( lua_State* L ) {
  */
 int SledgeInputWrapper::_getNameForKeybScancode( lua_State* L )
 {
-	MOAI_LUA_SETUP ( SledgeInputWrapper, "UN" );
+	// This looks like old stuff that just doesn't work this way anymore.
+	// call this from lua like so: SledgeInputWrapper.getNameForKeybScancode(scancode)
+	//MOAI_LUA_SETUP ( SledgeInputWrapper, "UN" );
+	MOAILuaState state(L);
 
 	// get the scancode
-	SDL_Scancode sc = (SDL_Scancode)(state.GetValue<int>(2, 0));
+	SDL_Scancode sc = (SDL_Scancode)(state.GetValue<int>(1, 0));
 
 	// get the name
 	const char* name = SDL_GetScancodeName(sc);
@@ -69,9 +75,12 @@ int SledgeInputWrapper::_getNameForKeybScancode( lua_State* L )
 
 int SledgeInputWrapper::_hideCursorInsideWindow( lua_State* L )
 {
-	MOAI_LUA_SETUP (SledgeInputWrapper, "UB");
+	// This looks like old stuff that just doesn't work this way anymore.
+	// called from lua like so: SledgeInputWrapper.hideCursorInsideWindow(bHidden)
+	//MOAI_LUA_SETUP (SledgeInputWrapper, "UB");
+	MOAILuaState state(L);
 	
-	bool val = state.GetValue<bool>(2, true);
+	bool val = state.GetValue<bool>(1, true);
 
 	_manager->hideCursorInsideWindow(val);
 	
