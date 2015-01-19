@@ -564,7 +564,7 @@ void SledgeInputManager::doOnTick()
 
 	int _numjoysticks_thistick = SDL_NumJoysticks();
 
-//	printf("Cursor inside app: %d\n", bCursorWithinWindow);
+	//printf("Cursor inside app: %d, %d\n", bCursorWithinWindow, bHideCursorWhenInsideWindow);
 	SDL_ShowCursor((int)!(bCursorWithinWindow && bHideCursorWhenInsideWindow));
 
 	//printf("# of joysticks connected: %d\n", _numjoysticks);
@@ -735,44 +735,17 @@ void SledgeInputManager::setDeadzones
 
 void SledgeInputManager::inputNotify_onKeyDown(SDL_KeyboardEvent* p_event)
 {
+	// TODO: clean up and optimize this
 	bool bIsDown = p_event->state == SDL_PRESSED;
-	SDL_Scancode scancode = p_event->keysym.scancode;
 	SDL_Scancode scancode2 = SDL_GetScancodeFromKey(p_event->keysym.sym);
-
-	if(scancode != scancode2)
-		scancode = scancode2;
-	
-	keybState* pps_keyb = &(pp_keybState.pp[pingpongSide]);
-	switch (pingpongSide)
-	{
-	case BS_PING:
-		//printf("Ping!\t");
-		break;
-	case BS_PONG:
-		//printf("Pong!\t");
-		break;
-	default:
-		break;
-	};
-
-
-	pps_keyb->state[scancode] = bIsDown;
-	/*
-	printf(
-		"dispatch [%d][%d][%d]\n",
-		scancode,
-		pps_keyb->state[scancode],
-		pp_keybState.pp[!pingpongSide].state[scancode]
-	);
-	*/
 
 	// @todo move aku notification to the ontick function
 
-	
+	int keycode = SDL_GetKeyFromScancode(scancode2);
 	AKUEnqueueKeyboardEvent(
 		SLEDGE_NAMESPACE::ID_DEVICE,
 		SLEDGE_NAMESPACE::IDS_KEYBOARD,
-		scancode2,
+		keycode,
 		bIsDown
 	);
 	
